@@ -40,7 +40,7 @@ export default function Web({ sampleBackendEnv }: Props) {
       </p>
 
       <p>
-        Hello word
+        Hello word 😍
       </p>
     </div>
   );

@@ -13,7 +13,6 @@ env:
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
 
     permissions:
@@ -51,3 +50,20 @@ jobs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Retrieve the secret and add it to the ssh key
+        env:
+          MIKRUS_SSH: ${{ secrets.MIKRUS_SSH }}
+        run: |
+          mkdir -p ~/.ssh/
+          chmod 700 ~/.ssh
+          echo "$MIKRUS_SSH" > ~/.ssh/id_ed25519
+          chmod 400 ~/.ssh/id_ed25519
+
+      - name: Run command in Mikrus
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.MIKRUS_USER }}@${{ secrets.MIKRUS_HOST }} -p${{ secrets.MIKRUS_PORT }} "bash upgrade-docker.sh"
