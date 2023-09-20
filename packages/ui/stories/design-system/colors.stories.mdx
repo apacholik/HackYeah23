@@ -1,0 +1,24 @@
+import { Meta, ColorPalette, ColorItem } from "@storybook/addon-docs";
+
+import { theme as defaultTheme } from "ui/themes/default";
+import { decorators, parameters } from "ui/stories/common";
+
+<Meta
+  title="Design System/Colors"
+  decorators={[...decorators]}
+  parameters={{ ...parameters }}
+/>
+
+# Colors
+
+<br />
+
+### Default color scheme
+
+<br />
+
+<ColorPalette>
+  {Object.values(defaultTheme.colors).map(({ token, value }) => {
+    return <ColorItem key={token} title={token} colors={{ [token]: value }} />;
+  })}
+</ColorPalette>

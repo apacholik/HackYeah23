@@ -1,0 +1,10 @@
+# next.js
+.next
+out/
+build
+
+# turbo
+.turbo
+
+# storybook
+storybook-static

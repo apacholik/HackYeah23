@@ -1,0 +1,51 @@
+{
+  "name": "web-app",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "sideEffects": false,
+  "scripts": {
+    "dev": "npm run dev:https",
+    "dev:https": "NODE_OPTIONS='--inspect' NODE_ENV=development ts-node httpsServer.ts",
+    "dev:http": "NODE_OPTIONS='--inspect' NODE_ENV=development next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "jest --watch",
+    "test:ci": "jest --ci",
+    "msw:reinitialize": "npx msw init public --no-save",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next"
+  },
+  "dependencies": {
+    "@next/bundle-analyzer": "^12.2.5",
+    "@next/env": "^12.2.5",
+    "cross-env": "^7.0.3",
+    "minireset.css": "^0.0.7",
+    "next": "^12.2.5",
+    "next-transpile-modules": "^9.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "ui": "*",
+    "utils": "*"
+  },
+  "devDependencies": {
+    "@storybook/addon-links": "^6.5.10",
+    "@storybook/jest": "^0.0.10",
+    "@storybook/react": "^6.5.10",
+    "@storybook/testing-library": "^0.0.13",
+    "@storybook/testing-react": "^1.3.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.3.0",
+    "@types/node": "^18.7.2",
+    "@types/react": "18.0.17",
+    "babel-plugin-transform-stitches-display-name": "^0.0.1",
+    "eslint-config-custom": "*",
+    "jest": "^28.1.3",
+    "jest-environment-jsdom": "^28.1.3",
+    "msw": "^0.47.3",
+    "storybook": "*",
+    "ts-node": "^10.9.1",
+    "tsconfig": "*",
+    "typescript": "^4.7.4"
+  }
+}

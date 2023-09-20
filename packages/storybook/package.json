@@ -1,0 +1,32 @@
+{
+  "name": "storybook",
+  "version": "0.0.0",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "storybook": "start-storybook -p 6006 -s public",
+    "storybook:build": "build-storybook -s public --quiet",
+    "msw:reinitialize": "npx msw init public --no-save",
+    "lint": "eslint",
+    "clean": "rm -rf .turbo && rm -rf node_modules"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@storybook/addon-a11y": "^6.5.10",
+    "@storybook/addon-essentials": "^6.5.10",
+    "@storybook/addon-interactions": "^6.5.10",
+    "@storybook/addon-links": "^6.5.10",
+    "@storybook/builder-webpack5": "^6.5.10",
+    "@storybook/manager-webpack5": "^6.5.10",
+    "@storybook/react": "^6.5.10",
+    "babel-plugin-transform-stitches-display-name": "^0.0.1",
+    "eslint": "^8.21.0",
+    "eslint-config-custom": "*",
+    "minireset.css": "^0.0.7",
+    "msw": "^0.47.3",
+    "multiple-themes-stitches": "^0.0.10",
+    "storybook-addon-next-router": "^4.0.0",
+    "tsconfig": "*",
+    "typescript": "^4.7.4"
+  }
+}

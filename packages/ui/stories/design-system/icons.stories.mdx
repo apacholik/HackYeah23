@@ -1,0 +1,27 @@
+import { Meta, IconGallery, IconItem } from "@storybook/addon-docs";
+
+import { decorators, parameters } from "ui/stories/common";
+
+import * as icons from "ui/components/icons";
+
+<Meta
+  title="Design System/Iconography"
+  decorators={[...decorators]}
+  parameters={{ ...parameters }}
+/>
+
+# Iconography
+
+<br />
+
+<IconGallery>
+  {Object.entries(icons)
+    .sort()
+    .map(([iconName, IconComponent]) => {
+      return (
+        <IconItem name={iconName} key={iconName}>
+          <IconComponent />
+        </IconItem>
+      );
+    })}
+</IconGallery>

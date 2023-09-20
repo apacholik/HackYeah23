@@ -1,0 +1,33 @@
+{
+  "configurations": [
+    {
+      "type": "firefox",
+      "name": "web-app dev:https - Firefox",
+      "request": "attach",
+      "reAttach": true,
+      "url": "https://localhost:3000",
+      "webRoot": "${workspaceFolder}/apps/web-app",
+      "pathMappings": [
+        {
+          "url": "webpack://_n_e/packages",
+          "path": "${workspaceFolder}/packages"
+        },
+        {
+          "url": "webpack://_n_e/components",
+          "path": "${workspaceFolder}/apps/web-app/components"
+        },
+        {
+          "url": "webpack://_n_e/pages",
+          "path": "${workspaceFolder}/apps/web-app/pages"
+        }
+      ]
+    },
+    {
+      "type": "pwa-chrome",
+      "name": "web-app dev:https - Chrome",
+      "request": "attach",
+      "url": "https://localhost:3000",
+      "webRoot": "${workspaceFolder}/apps/web-app"
+    }
+  ]
+}

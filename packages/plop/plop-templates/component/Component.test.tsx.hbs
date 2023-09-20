@@ -1,0 +1,16 @@
+import { composeStories } from "@storybook/testing-react";
+import { render, screen } from "@testing-library/react";
+
+import * as stories from "./{{pascalCase name}}.stories";
+
+const { Default } = composeStories(stories);
+
+describe("{{pascalCase name}}", () => {
+  it("should render", () => {
+    render(<Default />);
+
+    const helloWorldText = screen.getByText(/{{pascalCase name}} works!/i);
+
+    expect(!!helloWorldText).not.toBeNull();
+  });
+});

@@ -1,0 +1,56 @@
+{
+  "name": "turborepo-project-starter",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "author": {
+    "name": "Unity Group",
+    "url": "https://www.unitygroup.com/"
+  },
+  "repository": {
+    "url": "https://git.unity.pl/jzywiec/turborepo-project-starter"
+  },
+  "packageManager": "yarn@1.22.18",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "yarn": ">=1.22.18",
+    "node": ">=16.15.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,md,js,json}": "prettier --write"
+  },
+  "standard-version": {
+    "scripts": {
+      "precommit": "echo \"[skip ci]\""
+    }
+  },
+  "scripts": {
+    "prepare": "node -e \"try { require('husky').install() } catch (e) {if (e.code !== 'MODULE_NOT_FOUND') throw e}\"",
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "test:ci": "turbo run test:ci",
+    "release:major": "standard-version --release-as major",
+    "release:minor": "standard-version --release-as minor",
+    "release:patch": "standard-version --release-as patch",
+    "format": "prettier --write \"**/*.{ts,tsx,md,mdx,js,json}\""
+  },
+  "dependencies": {
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
+    "standard-version": "^9.3.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.21.0",
+    "eslint-config-custom": "*",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "turbo": "^1.4.3"
+  }
+}

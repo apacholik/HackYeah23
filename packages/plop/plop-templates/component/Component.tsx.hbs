@@ -1,0 +1,17 @@
+import { ReactNode } from "react";
+
+import * as S from "./{{pascalCase name}}.styled";
+
+type Props = {
+  children?: ReactNode;
+};
+
+/** Documentation for {{pascalCase name}} component */
+export function {{pascalCase name}}({ children }: Props) {
+  return (
+    <S.{{pascalCase name}}>
+      <span>{{pascalCase name}} works!</span>
+      {children}
+    </S.{{pascalCase name}}>
+  );
+}

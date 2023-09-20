@@ -1,0 +1,19 @@
+import { DocsContainer } from "@storybook/addon-docs";
+import { Meta, Typeset } from "@storybook/addon-docs/blocks";
+
+import { theme as defaultTheme } from "ui/themes/default";
+import { decorators, parameters } from "ui/stories/common";
+
+import { RenderTypesetsList } from "./storiesUtils";
+
+<Meta
+  title="Design System/Typography"
+  decorators={[...decorators]}
+  parameters={{ ...parameters }}
+/>
+
+# Typography
+
+<br />
+
+<div>{RenderTypesetsList(defaultTheme)}</div>

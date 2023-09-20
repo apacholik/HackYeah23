@@ -1,0 +1,22 @@
+{
+  "name": "plop",
+  "version": "0.0.0",
+  "license": "UNLICENSED",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "plop": "npm run plop:clean && tsc && plop",
+    "postplop": "npm run plop:clean",
+    "plop:clean": "rm -f plopfile.js && rm -f plopfile.d.ts",
+    "lint": "eslint",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf out"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^8.21.0",
+    "eslint-config-custom": "*",
+    "plop": "^3.1.1",
+    "tsconfig": "*",
+    "typescript": "^4.7.4"
+  }
+}
