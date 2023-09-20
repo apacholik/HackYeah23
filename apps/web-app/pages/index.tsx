@@ -38,6 +38,10 @@ export default function Web({ sampleBackendEnv }: Props) {
       <p>
         {toSlug("This text should be displayed as slug (via toSlug util)!")}
       </p>
+
+      <p>
+        Hello word
+      </p>
     </div>
   );
 }
