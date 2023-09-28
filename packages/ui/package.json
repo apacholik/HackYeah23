@@ -16,7 +16,7 @@
   "dependencies": {
     "polished": "^4.2.2",
     "react": "^18.2.0",
-    "tailwind-config": "workspace:*"
+    "tailwind-config": "*"
   },
   "devDependencies": {
     "@jest/types": "^28.1.3",
