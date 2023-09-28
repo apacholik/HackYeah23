@@ -21,7 +21,7 @@ export default function Web({ sampleBackendEnv }: Props) {
 
   return (
     <div>
-      <h1>Web App</h1>
+      <h1>Web App EL 1O</h1>
 
       <SamplePage />
 
@@ -35,13 +35,9 @@ export default function Web({ sampleBackendEnv }: Props) {
 
       <SampleButton />
 
-      <p>
-        {toSlug("This text should be displayed as slug (via toSlug util)!")}
-      </p>
+      <p>{toSlug("This text should be displayed as slug (via toSlug util)!")}</p>
 
-      <p>
-        Hello word 😍
-      </p>
+      <p>Hello word 😍</p>
     </div>
   );
 }

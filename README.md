@@ -18,7 +18,7 @@ Below you can find list of components of the monorepo. Each app/package is 100% 
 
 #### Packages
 
-- `ui`: A [React](https://reactjs.org) and [Stitches](https://stitches.dev) component library, also contains themes definitions
+- `ui`: A [React](https://reactjs.org) and [Tailwind Variants](https://www.tailwind-variants.org) component library, also contains themes definitions
 - `plop`: A set of generators made with [Plop.js](https://plopjs.com), can be used to setup boilerplate for other apps and packages
 - `storybook`: An optimized setup of [Storybook](https://storybook.js.org) collecting all the stories throughout the monorepo
 - `utils`: Utilities (such as standard helper functions, but also React hooks) to be used in apps

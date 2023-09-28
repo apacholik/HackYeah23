@@ -18,6 +18,6 @@ module.exports = {
   ],
   babel: async (options) => ({
     ...options,
-    plugins: [...(options.plugins || []), "transform-stitches-display-name"],
+    plugins: [...(options.plugins || [])],
   }),
 };

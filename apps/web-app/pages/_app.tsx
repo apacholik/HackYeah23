@@ -1,4 +1,5 @@
 import "minireset.css";
+import '../styles/global.css';
 
 import type { AppProps } from "next/app";
 import attachThemeGlobalCss from "ui/helpers/attachThemeGlobalCss";

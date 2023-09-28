@@ -1,17 +1,18 @@
 import { ReactNode } from "react";
+import type { VariantProps } from "tailwind-variants";
 
-import * as S from "./{{pascalCase name}}.styled";
+import * as styles from "./{{pascalCase name}}.styled";
 
 type Props = {
   children?: ReactNode;
-};
+} & VariantProps<typeof styles.{{camelCase name}}>;
 
 /** Documentation for {{pascalCase name}} component */
-export function {{pascalCase name}}({ children }: Props) {
+export function {{pascalCase name}}({ children, ...restProps }: Props) {
   return (
-    <S.{{pascalCase name}}>
+    <div className={styles.{{camelCase name}}(restProps)}>
       <span>{{pascalCase name}} works!</span>
       {children}
-    </S.{{pascalCase name}}>
+    </div>
   );
 }
