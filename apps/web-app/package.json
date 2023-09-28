@@ -26,7 +26,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "ui": "*",
-    "utils": "*"
+    "utils": "*",
+    "zustand": "^4.4.1"
   },
   "devDependencies": {
     "@storybook/addon-links": "^6.5.10",

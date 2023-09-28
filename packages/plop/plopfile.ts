@@ -16,7 +16,7 @@ const PACKAGES_RELATIVE_PATHS_CONFIG = [
 const AUTO_EXPORT_PATTERN_LINE =
   "// DO NOT EDIT: File generated automatically!";
 
-function toPascalCase(str: string): string {
+function toPascalCase(str: string) {
   return `${str.trim()}`
     .replace(new RegExp(/[-_]+/, "g"), " ")
     .replace(new RegExp(/[^\w\s]/, "g"), "")
@@ -27,14 +27,14 @@ function toPascalCase(str: string): string {
     .replace(new RegExp(/\w/), (s) => s.toUpperCase());
 }
 
-function toCamelCase(str: string): string {
+function toCamelCase(str: string) {
   return str
     .replace(/\s(.)/g, (s) => s.toUpperCase())
     .replace(/\s/g, "")
     .replace(/^(.)/, (b) => b.toLowerCase());
 }
 
-async function getChildDirectories(sourcePath: string): Promise<string[]> {
+async function getChildDirectories(sourcePath: string) {
   const dirContent = await fs.readdir(sourcePath, { withFileTypes: true });
 
   return dirContent
@@ -46,7 +46,7 @@ function stringsToChoicesList(strList: string[] = []) {
   return strList.map((val) => ({ name: val, value: val }));
 }
 
-async function getNamespaces(baseDir: string): Promise<string[]> {
+async function getNamespaces(baseDir: string) {
   const namespaces = await getChildDirectories(
     path.resolve(baseDir, "./components")
   );
@@ -54,10 +54,7 @@ async function getNamespaces(baseDir: string): Promise<string[]> {
   return namespaces;
 }
 
-async function getComponentsInNamespace(
-  baseDir: string,
-  namespace: string
-): Promise<string[]> {
+async function getComponentsInNamespace(baseDir: string, namespace: string) {
   const components = await getChildDirectories(
     path.resolve(baseDir, `./components/${namespace}`)
   );
@@ -68,7 +65,7 @@ function validateInput(
   input: string,
   inputDisplayName: string,
   choices?: string[]
-): true | string {
+) {
   if (!input) return `${inputDisplayName} must have name!`;
 
   if (choices != null && choices.find((str) => str === input)) {
@@ -78,6 +75,20 @@ function validateInput(
   return true;
 }
 
+function displayIntro() {
+  console.log(`
+  ██╗   ██╗███████╗███████╗
+  ██║   ██║██╔════╝██╔════╝
+  ██║   ██║█████╗  █████╗  
+  ██║   ██║██╔══╝  ██╔══╝  
+  ╚██████╔╝██║     ██║     
+   ╚═════╝ ╚═╝     ╚═╝     
+    _                      
+  >(.)__  CODE GENERATOR   
+   (___/ ================= 
+  `);
+}
+
 export default function initPlop(plop: NodePlopAPI) {
   const projectDirPrompt = {
     type: "list",
@@ -85,6 +96,8 @@ export default function initPlop(plop: NodePlopAPI) {
     message: "Please select project's directory",
     choices: stringsToChoicesList(PACKAGES_RELATIVE_PATHS_CONFIG),
   };
+
+  displayIntro();
 
   plop.setGenerator("Component", {
     description: "React component",
@@ -197,7 +210,7 @@ export default function initPlop(plop: NodePlopAPI) {
         type: "input",
         name: "name",
         message:
-          'Please enter name for the hook (remember to start with "use"!)',
+          'Please enter name for the hook (remember to start with "use", e.g. useExample!)',
         validate: async (input, answers) => {
           if (!answers) return false;
 
@@ -240,6 +253,61 @@ export default function initPlop(plop: NodePlopAPI) {
         path: "{{ projectDir }}/hooks/index.ts",
         pattern: AUTO_EXPORT_PATTERN_LINE,
         template: `export { default as {{ camelCase name }} } from "./{{ camelCase name }}";`,
+      },
+    ],
+  });
+
+  plop.setGenerator("Store", {
+    description: "Zustand store",
+    prompts: [
+      projectDirPrompt,
+      {
+        type: "input",
+        name: "name",
+        message:
+          'Please enter name for the store (remember to end with "Store", eg. "ExampleStore"!)',
+        validate: async (input, answers) => {
+          if (!answers) return false;
+
+          const storeName = toPascalCase(input);
+          const storeSuffix = "Store";
+
+          if (
+            storeName.length <= storeSuffix.length ||
+            !storeName.endsWith(storeSuffix)
+          ) {
+            return "Incorrect store name!";
+          }
+
+          const stores = await getChildDirectories(
+            path.resolve(answers["projectDir"], `./stores`)
+          );
+
+          return validateInput(storeName, "Store", stores);
+        },
+      },
+    ],
+    actions: [
+      {
+        type: "add",
+        path: "{{ projectDir }}/stores/{{camelCase name}}/{{camelCase name}}.ts",
+        templateFile: "plop-templates/store/store.ts.hbs",
+      },
+      {
+        type: "add",
+        path: "{{ projectDir }}/stores/{{camelCase name}}/{{camelCase name}}.test.ts",
+        templateFile: "plop-templates/store/store.test.tsx.hbs",
+      },
+      {
+        type: "add",
+        path: "{{ projectDir }}/stores/{{camelCase name}}/index.ts",
+        templateFile: "plop-templates/store/index.ts.hbs",
+      },
+      {
+        type: "append",
+        path: "{{ projectDir }}/stores/index.ts",
+        pattern: AUTO_EXPORT_PATTERN_LINE,
+        template: `export * as {{ camelCase name }} from "./{{ camelCase name }}";`,
       },
     ],
   });
