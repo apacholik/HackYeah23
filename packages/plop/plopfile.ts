@@ -76,13 +76,9 @@ function validateInput(
 }
 
 function displayIntro() {
-  console.log(`
-  ██╗   ██╗███████╗███████╗
-  ██║   ██║██╔════╝██╔════╝
-  ██║   ██║█████╗  █████╗  
-  ██║   ██║██╔══╝  ██╔══╝  
-  ╚██████╔╝██║     ██║     
-   ╚═════╝ ╚═╝     ╚═╝     
+  console.log(`      H A C K
+          Y E A H
+              2 0 2 3
     _                      
   >(.)__  CODE GENERATOR   
    (___/ ================= 
