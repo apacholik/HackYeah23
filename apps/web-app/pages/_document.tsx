@@ -1,17 +1,18 @@
 import NextDocument, { Head, Html, Main, NextScript } from "next/document";
 import React from "react";
-import { getCssText } from "ui/themes";
+// import { getCssText } from "ui/themes";
 
 export default class Document extends NextDocument {
   render() {
     return (
       <Html lang="en">
-        <Head>
+        <Head />
+        {/* <Head>
           <style
             id="stitches"
             dangerouslySetInnerHTML={{ __html: getCssText() }}
           />
-        </Head>
+        </Head> */}
         <body>
           <Main />
           <NextScript />

@@ -98,5 +98,6 @@
       "type": "text",
       "multiline": true
     }
-  ]
+  ],
+  "tailwindCSS.experimental.classRegex": [["tv\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]]
 }
