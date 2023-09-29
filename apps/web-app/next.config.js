@@ -3,10 +3,22 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
 
+const baseApiUrl = process.env.API_BASE_URL;
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  rewrites() {
+    return {
+      afterFiles: [
+        {
+          source: '/api/:path*',
+          destination: `${baseApiUrl}:path*`,
+        },
+      ]
+    };
+  }
 };
 
 module.exports = (_phase, { defaultConfig }) => {
