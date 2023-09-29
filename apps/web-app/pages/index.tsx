@@ -23,7 +23,7 @@ export default function Web({ sampleBackendEnv, messageFromBackend }: Props) {
 
   return (
     <div>
-      <h1>Web App EL 1O</h1>
+      <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight transition-colors first:mt-0">Web App EL 1O</h2>
 
       <SamplePage />
 
