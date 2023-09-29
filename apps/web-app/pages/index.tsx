@@ -4,12 +4,14 @@ import { SampleButton } from "ui/components/example";
 import { toSlug } from "utils/helpers";
 
 import SamplePage from "../components/example/SamplePage";
+import { apiClient } from "../helpers";
 
 type Props = {
   sampleBackendEnv: string;
+  messageFromBackend: string;
 };
 
-export default function Web({ sampleBackendEnv }: Props) {
+export default function Web({ sampleBackendEnv, messageFromBackend }: Props) {
   useEffect(() => {
     const fetchMswSample = async () => {
       return await (await fetch("/reviews")).json();
@@ -28,6 +30,7 @@ export default function Web({ sampleBackendEnv }: Props) {
       <h2>Sample envs</h2>
       <pre>Backend: {sampleBackendEnv}</pre>
       <pre>Frontend: {process.env.NEXT_PUBLIC_SAMPLE_FRONTEND}</pre>
+      <pre>Message from backend: {messageFromBackend}</pre>
 
       <div>
         <a href="/about">About Us</a>
@@ -42,10 +45,23 @@ export default function Web({ sampleBackendEnv }: Props) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
   const props: Props = {
     sampleBackendEnv: process.env.SAMPLE_BACKEND || "",
+    messageFromBackend: "Coś bardzo poszło nie tak",
   };
+
+  try {
+    const response = await apiClient.post("test", null, {
+      params: {
+        test: "Wrocław gurom!"
+      }
+    });
+
+    props.messageFromBackend = response.data;
+  } catch {
+    props.messageFromBackend = "Backend się obraził i nic nie powie";
+  }
 
   return {
     props,
