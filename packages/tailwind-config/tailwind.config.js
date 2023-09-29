@@ -1,3 +1,4 @@
+const defaultTheme = require("tailwindcss/defaultTheme");
 const { withTV } = require("tailwind-variants/transformer");
 
 /** @type {import('tailwindcss').Config} */
@@ -9,7 +10,11 @@ module.exports = withTV({
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["Roboto", ...defaultTheme.fontFamily.sans],
+      },
+    },
   },
   plugins: [],
 });

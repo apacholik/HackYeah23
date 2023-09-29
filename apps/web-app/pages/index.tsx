@@ -1,8 +1,11 @@
 import { GetServerSideProps } from "next";
+import Link from "next/link";
 import { useEffect } from "react";
 import { SampleButton } from "ui/components/example";
 import { toSlug } from "utils/helpers";
 
+import { Card, Tabs } from "../components/atoms";
+import { Ping, WeatherForecast } from "../components/example";
 import SamplePage from "../components/example/SamplePage";
 import { apiClient } from "../helpers";
 
@@ -22,25 +25,66 @@ export default function Web({ sampleBackendEnv, messageFromBackend }: Props) {
   }, []);
 
   return (
-    <div>
+    <div className="flex flex-col gap-6">
       <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight transition-colors first:mt-0">Web App EL 1O</h2>
 
-      <SamplePage />
+      <Tabs.Root defaultValue="greeting">
+        <Tabs.TabsList>
+          <Tabs.TabsTrigger value="greeting">Greeting</Tabs.TabsTrigger>
+          <Tabs.TabsTrigger value="api">API communication</Tabs.TabsTrigger>
+        </Tabs.TabsList>
 
-      <h2>Sample envs</h2>
-      <pre>Backend: {sampleBackendEnv}</pre>
-      <pre>Frontend: {process.env.NEXT_PUBLIC_SAMPLE_FRONTEND}</pre>
-      <pre>Message from backend: {messageFromBackend}</pre>
+        <Tabs.TabsContent value="greeting" className="grid grid-cols-2 gap-6">
+          <Card.Root className="">
+            <Card.CardHeader>
+              <Card.CardTitle>Sample elements</Card.CardTitle>
+            </Card.CardHeader>
 
-      <div>
-        <a href="/about">About Us</a>
-      </div>
+            <Card.CardContent className="flex flex-col items-start gap-3">
+              <p>Hello word 😍</p>
 
-      <SampleButton />
+              <Link href="/about">
+                <a className="flex items-center">
+                  <span>About Us</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M15.586 10.6569L11.636 6.70692C11.4538 6.51832 11.353 6.26571 11.3553 6.00352C11.3576 5.74132 11.4628 5.49051 11.6482 5.3051C11.8336 5.11969 12.0844 5.01452 12.3466 5.01224C12.6088 5.00997 12.8614 5.11076 13.05 5.29292L18.707 10.9499C18.8002 11.0426 18.8741 11.1527 18.9246 11.2741C18.9751 11.3954 19.001 11.5255 19.001 11.6569C19.001 11.7883 18.9751 11.9184 18.9246 12.0398C18.8741 12.1611 18.8002 12.2713 18.707 12.3639L13.05 18.0209C12.9578 18.1164 12.8474 18.1926 12.7254 18.245C12.6034 18.2974 12.4722 18.325 12.3394 18.3262C12.2066 18.3273 12.0749 18.302 11.952 18.2517C11.8291 18.2015 11.7175 18.1272 11.6236 18.0333C11.5297 17.9394 11.4555 17.8278 11.4052 17.7049C11.3549 17.582 11.3296 17.4503 11.3307 17.3175C11.3319 17.1847 11.3595 17.0535 11.4119 16.9315C11.4643 16.8095 11.5405 16.6992 11.636 16.6069L15.586 12.6569H6C5.73478 12.6569 5.48043 12.5516 5.29289 12.364C5.10536 12.1765 5 11.9221 5 11.6569C5 11.3917 5.10536 11.1373 5.29289 10.9498C5.48043 10.7623 5.73478 10.6569 6 10.6569H15.586Z"
+                      fill="#21272A"
+                    />
+                  </svg>
+                </a>
+              </Link>
 
-      <p>{toSlug("This text should be displayed as slug (via toSlug util)!")}</p>
+              <SampleButton />
 
-      <p>Hello word 😍</p>
+              <p>{toSlug("This text should be displayed as slug (via toSlug util)!")}</p>
+            </Card.CardContent>
+          </Card.Root>
+
+          <Card.Root className="">
+            <Card.CardHeader>
+              <Card.CardTitle>Sample envs</Card.CardTitle>
+            </Card.CardHeader>
+
+            <Card.CardContent>
+              <pre>Backend: {sampleBackendEnv}</pre>
+              <pre>Frontend: {process.env.NEXT_PUBLIC_SAMPLE_FRONTEND}</pre>
+              <pre>Message from backend: {messageFromBackend}</pre>
+            </Card.CardContent>
+          </Card.Root>
+
+          <Card.Root className="col-span-2">
+            <Card.CardContent>
+              <SamplePage />
+            </Card.CardContent>
+          </Card.Root>
+        </Tabs.TabsContent>
+
+        <Tabs.TabsContent value="api" className="grid grid-cols-3 gap-6">
+          <WeatherForecast />
+          <Ping />
+        </Tabs.TabsContent>
+      </Tabs.Root>
     </div>
   );
 }
@@ -54,8 +98,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
   try {
     const response = await apiClient.post("test", null, {
       params: {
-        test: "Wrocław gurom!"
-      }
+        test: "Wrocław gurom!",
+      },
     });
 
     props.messageFromBackend = response.data;
