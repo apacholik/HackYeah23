@@ -19,6 +19,7 @@
   "dependencies": {
     "@next/bundle-analyzer": "^12.2.5",
     "@next/env": "^12.2.5",
+    "@radix-ui/react-tabs": "^1.0.4",
     "cross-env": "^7.0.3",
     "minireset.css": "^0.0.7",
     "next": "^12.2.5",
