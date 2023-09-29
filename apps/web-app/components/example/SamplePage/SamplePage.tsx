@@ -1,17 +1,18 @@
 import { ReactNode } from "react";
+import type { VariantProps } from "tailwind-variants";
 
-import * as S from "./SamplePage.styled";
+import * as styles from "./SamplePage.styled";
 
 type Props = {
   children?: ReactNode;
-};
+} & VariantProps<typeof styles.samplePage>;
 
 /** Documentation for SamplePage component */
-export function SamplePage({ children }: Props) {
+export function SamplePage({ children, ...restProps }: Props) {
   return (
-    <S.SamplePage>
+    <div className={styles.samplePage(restProps)}>
       <span>SamplePage works!</span>
       {children}
-    </S.SamplePage>
+    </div>
   );
 }
