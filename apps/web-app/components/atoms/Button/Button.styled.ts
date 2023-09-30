@@ -5,7 +5,7 @@ export const button = tv({
 
   variants: {
     color: {
-      primary: "bg-blue-900 hover:bg-blue-800 text-white",
+      primary: "bg-blue-900 hover:bg-blue-800 text-white disabled:opacity-50 disabled:cursor-not-allowed",
     },
 
     inverse: {

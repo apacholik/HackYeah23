@@ -4,7 +4,7 @@
 
 html,
 body,
-body > div.__next {
+body > div#__next {
   height: 100%;
   min-height: 100vh;
 }
