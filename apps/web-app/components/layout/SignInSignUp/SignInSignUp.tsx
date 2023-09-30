@@ -1,9 +1,7 @@
 import { Dialog } from "../../atoms";
 
-type Props = {};
-
 /** Documentation for SignInSignUp component */
-export function SignInSignUp({}: Props) {
+export function SignInSignUp() {
   return (
     <Dialog.Root>
       <Dialog.DialogTrigger className="bg-blue-100 rounded-md px-2 py-1 flex items-center gap-1">
