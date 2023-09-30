@@ -7,6 +7,7 @@ import { toSlug } from "utils/helpers";
 import { Card, Tabs } from "../components/atoms";
 import { Ping, WeatherForecast } from "../components/example";
 import SamplePage from "../components/example/SamplePage";
+import { SpotPointMap } from "../components/maps";
 import { apiClient } from "../helpers";
 import { useLocationActions, useLocationCoords, useLocationIsEnabled } from "../stores/locationStore";
 
@@ -93,14 +94,21 @@ export default function Web({ sampleBackendEnv, messageFromBackend }: Props) {
 
         <Tabs.TabsContent value="maps">
           <p>Is location enabled? {isLocationEnabled?.toString()}</p>
-          <p>Coords: {locationCoords?.toString()}</p>
+          <p>Coords: {JSON.stringify(locationCoords)}</p>
 
-          <button type="button" onClick={() => locationActions.enable()}>
-            Enable maps
-          </button>
-          <button type="button" onClick={() => locationActions.disable()}>
-            Disable maps
-          </button>
+          <div>
+            <button type="button" onClick={() => locationActions.enable()}>
+              <strong>Click to enable maps</strong>
+            </button>
+          </div>
+
+          <div>
+            <button type="button" onClick={() => locationActions.disable()}>
+              Click to disable maps
+            </button>
+          </div>
+
+          <SpotPointMap onAnimalMarkerMove={(animalPoint) => console.log({ animalPoint })} />
         </Tabs.TabsContent>
       </Tabs.Root>
     </div>

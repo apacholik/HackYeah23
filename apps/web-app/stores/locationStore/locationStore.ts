@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 type State = {
   enabled: boolean;
-  coords?: [number, number];
+  coords?: { lat: number; lng: number };
   listenerId?: number;
   actions: {
     enable: () => void;
@@ -26,7 +26,7 @@ const useLocationStore = create<State>((set, get) => ({
       };
 
       const listenerId = navigator.geolocation.watchPosition(
-        ({ coords }) => set({ enabled: true, coords: [coords.latitude, coords.longitude] }),
+        ({ coords }) => set({ enabled: true, coords: { lat: coords.latitude, lng: coords.longitude } }),
         () => set({ enabled: false, coords: undefined, listenerId: undefined }),
         config
       );
