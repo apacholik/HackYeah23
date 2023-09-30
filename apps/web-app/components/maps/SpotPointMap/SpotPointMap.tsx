@@ -2,10 +2,10 @@ import { type Point, GeoJson, GeoJsonFeature, Map as PidgeonMap, Overlay, ZoomCo
 import { osm } from "pigeon-maps/providers";
 import { useCallback, useLayoutEffect, useState } from "react";
 import type { VariantProps } from "tailwind-variants";
+import { Person } from "ui/components/icons";
 
 import { useLocationCoords } from "../../../stores/locationStore";
 import type { AnimalCoordsInfo } from "../../../types/animalCoords";
-import { PigeonIcon } from "./PidgeonIcon";
 import * as styles from "./SpotPointMap.styled";
 
 type Props = {
@@ -20,6 +20,7 @@ const MAP_DEFAULT_HEIGHT = 480;
 const INITIAL_ZOOM = 16;
 const USER_LOCATION_MARKER_SIZE = 32;
 const SPOTTED_POINT_RANGE = 1;
+const SPOTTED_POINT_RANGE_ZOOM_RATIO = 1.25;
 
 /** Map to be used with spotting form */
 export function SpotPointMap({ onAnimalMarkerMove = () => undefined, ...restProps }: Props) {
@@ -59,6 +60,12 @@ export function SpotPointMap({ onAnimalMarkerMove = () => undefined, ...restProp
     }
   }
 
+  const handleBoundsChange = (
+    { center, zoom }: { center: typeof mapState['center'], zoom: typeof mapState['zoom'] }
+  ) => {
+    setMapState({ center, zoom });
+  };
+
   useLayoutEffect(function grabInitialLocationCoords() {
     if (locationCoords != null && mapState.center == null) {
       setMapState({ center: [locationCoords.lat, locationCoords.lng] });
@@ -79,6 +86,7 @@ export function SpotPointMap({ onAnimalMarkerMove = () => undefined, ...restProp
         provider={osm}
         dprs={[1, 2]}
         onClick={handleMapClick}
+        onBoundsChanged={handleBoundsChange}
         animate
         zoomSnap={true}
         metaWheelZoom={false}
@@ -96,7 +104,7 @@ export function SpotPointMap({ onAnimalMarkerMove = () => undefined, ...restProp
             fill: "var(--tw-ring-color)",
             strokeWidth: "2",
             stroke: "var(--tw-ring-color)",
-            r: (SPOTTED_POINT_RANGE * 20).toString(),
+            r: (SPOTTED_POINT_RANGE * zoom * SPOTTED_POINT_RANGE_ZOOM_RATIO).toString(),
           }}
         >
           <GeoJsonFeature feature={geoJsonFeatureSample} />
@@ -104,7 +112,7 @@ export function SpotPointMap({ onAnimalMarkerMove = () => undefined, ...restProp
 
         {/* USER MARKER */}
         <Overlay anchor={[locationCoords.lat, locationCoords.lng]} offset={[USER_LOCATION_MARKER_SIZE / 2, USER_LOCATION_MARKER_SIZE / 2]}>
-          <PigeonIcon width={USER_LOCATION_MARKER_SIZE} height={USER_LOCATION_MARKER_SIZE} onClick={handleUserLocationMarkerClick} />
+          <Person style={{ fontSize: USER_LOCATION_MARKER_SIZE, color: "var(--fbc-primary-text)" }} onClick={handleUserLocationMarkerClick} />
         </Overlay>
 
         <ZoomControl />
