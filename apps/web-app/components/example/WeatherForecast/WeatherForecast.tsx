@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ReactNode } from "react";
 
 import { apiClient } from "../../../helpers";
-import { Card } from "../../atoms";
+import { Button, Card } from "../../atoms";
 
 type Props = {
   children?: ReactNode;
@@ -58,16 +58,15 @@ export function WeatherForecast({ className }: Props) {
       </Card.CardContent>
 
       <Card.CardFooter>
-        <button
+        <Button
           type="button"
           onClick={() => {
             remove();
             refetch();
           }}
-          className="rounded-md border bg-blue-900 text-white px-3 py-1 hover:bg-blue-800"
         >
           Try again
-        </button>
+        </Button>
       </Card.CardFooter>
     </Card.Root>
   );

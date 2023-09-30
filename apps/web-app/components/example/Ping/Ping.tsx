@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRef } from "react";
 
 import { apiClient } from "../../../helpers";
-import { Card } from "../../atoms";
+import { Button, Card } from "../../atoms";
 
 type Props = {
   className?: string;
@@ -55,15 +55,14 @@ export function Ping({ className }: Props) {
       </Card.CardContent>
 
       <Card.CardFooter>
-        <button
+        <Button
           type="button"
           onClick={() => {
             mutate();
           }}
-          className="rounded-md border bg-blue-900 text-white px-3 py-1 hover:bg-blue-800"
         >
           Send
-        </button>
+        </Button>
       </Card.CardFooter>
     </Card.Root>
   );
