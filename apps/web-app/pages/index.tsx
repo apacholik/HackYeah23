@@ -8,6 +8,7 @@ import { Card, Tabs } from "../components/atoms";
 import { Ping, WeatherForecast } from "../components/example";
 import SamplePage from "../components/example/SamplePage";
 import { apiClient } from "../helpers";
+import { useLocationActions, useLocationCoords, useLocationIsEnabled } from "../stores/locationStore";
 
 type Props = {
   sampleBackendEnv: string;
@@ -15,6 +16,10 @@ type Props = {
 };
 
 export default function Web({ sampleBackendEnv, messageFromBackend }: Props) {
+  const isLocationEnabled = useLocationIsEnabled();
+  const locationCoords = useLocationCoords();
+  const locationActions = useLocationActions();
+
   useEffect(() => {
     const fetchMswSample = async () => {
       return await (await fetch("/reviews")).json();
@@ -32,6 +37,7 @@ export default function Web({ sampleBackendEnv, messageFromBackend }: Props) {
         <Tabs.TabsList>
           <Tabs.TabsTrigger value="greeting">Greeting</Tabs.TabsTrigger>
           <Tabs.TabsTrigger value="api">API communication</Tabs.TabsTrigger>
+          <Tabs.TabsTrigger value="maps">Maps sample</Tabs.TabsTrigger>
         </Tabs.TabsList>
 
         <Tabs.TabsContent value="greeting" className="grid grid-cols-2 gap-6">
@@ -83,6 +89,18 @@ export default function Web({ sampleBackendEnv, messageFromBackend }: Props) {
         <Tabs.TabsContent value="api" className="grid grid-cols-3 gap-6">
           <WeatherForecast />
           <Ping />
+        </Tabs.TabsContent>
+
+        <Tabs.TabsContent value="maps">
+          <p>Is location enabled? {isLocationEnabled?.toString()}</p>
+          <p>Coords: {locationCoords?.toString()}</p>
+
+          <button type="button" onClick={() => locationActions.enable()}>
+            Enable maps
+          </button>
+          <button type="button" onClick={() => locationActions.disable()}>
+            Disable maps
+          </button>
         </Tabs.TabsContent>
       </Tabs.Root>
     </div>
