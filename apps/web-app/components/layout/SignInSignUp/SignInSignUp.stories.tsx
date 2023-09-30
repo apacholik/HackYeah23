@@ -10,7 +10,7 @@ export default {
   parameters: { ...parameters },
 } as ComponentMeta<typeof SignInSignUp>;
 
-const Template: ComponentStory<typeof SignInSignUp> = (props) => <SignInSignUp {...props} />;
+const Template: ComponentStory<typeof SignInSignUp> = () => <SignInSignUp />;
 
 export const Default = Template.bind({});
 Default.args = {

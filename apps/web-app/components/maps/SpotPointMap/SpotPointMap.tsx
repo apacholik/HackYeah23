@@ -81,7 +81,7 @@ export function SpotPointMap({ onAnimalMarkerMove = () => undefined, ...restProp
   }, [isLocationEnabled, locationCoords]);
 
   if (locationCoords == null || !isLocationEnabled) {
-    return <p>Need your coords to show map!</p>;
+    return null;
   }
 
   return (

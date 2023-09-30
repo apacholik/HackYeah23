@@ -3,8 +3,10 @@ import { GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { Button, Card, Input, Select } from "../../components/atoms";
+import { Button, Card, Select } from "../../components/atoms";
+import { SpotPointMap } from "../../components/maps";
 import { apiClient } from "../../helpers";
+import { useLocationActions, useLocationIsEnabled } from "../../stores/locationStore";
 import EncounterTypeResponse from "../../types/EncounterTypeResponse";
 
 type AnimalReportProps = {
@@ -26,6 +28,7 @@ const AnimalReport: NextPage<AnimalReportProps> = ({ encounterTypes }) => {
     longitude: 0,
     latitude: 0,
     encounterTypeId: "",
+    properties: {},
   });
 
   const updateFormState = (key: string) => (value: string | number) => {
@@ -47,6 +50,11 @@ const AnimalReport: NextPage<AnimalReportProps> = ({ encounterTypes }) => {
   const sendEncounter = () => {
     mutate();
   };
+
+  const isLocationEnabled = useLocationIsEnabled();
+  const locationActions = useLocationActions();
+
+  const disabledSendBtn = !isLocationEnabled || isLoading || isSuccess;
 
   const { push } = useRouter();
 
@@ -70,6 +78,28 @@ const AnimalReport: NextPage<AnimalReportProps> = ({ encounterTypes }) => {
 
       <Card.Root className="w-2/3">
         <Card.CardContent className="p-6 flex gap-2 flex-col">
+          {!isLocationEnabled && (
+            <div>
+              Potrzebujemy Twoich współrzędnych.{" "}
+              <span
+                className="bg-green-100 rounded-md p-1 px-2 hover:bg-green-300 cursor-pointer"
+                onClick={locationActions.enable}
+              >
+                Aktywuj
+              </span>
+            </div>
+          )}
+
+          <SpotPointMap
+            onAnimalMarkerMove={(animalPoint) => {
+              setFormState((current) => ({
+                ...current,
+                latitude: animalPoint.lat,
+                longitude: animalPoint.lng,
+              }));
+            }}
+          />
+
           <Select.Root onValueChange={updateFormState("encounterTypeId")}>
             <Select.SelectTrigger>
               <Select.SelectValue placeholder="Typ" />
@@ -84,25 +114,9 @@ const AnimalReport: NextPage<AnimalReportProps> = ({ encounterTypes }) => {
             </Select.SelectContent>
           </Select.Root>
 
-          <Input
-            placeholder="Szerokość geograficzna"
-            name="latitude"
-            onChange={(event) => updateFormState("latitude")(event.target.value)}
-          />
-
-          <Input
-            placeholder="Długość geograficzna"
-            name="longitude"
-            onChange={(event) => updateFormState("longitude")(event.target.value)}
-          />
-
           {isError && <div className="text-center text-red-900">Coś poszło nie tak 😿</div>}
 
-          <Button
-            disabled={isLoading || isSuccess}
-            onClick={sendEncounter}
-            className="flex gap-1 justify-center items-center"
-          >
+          <Button disabled={disabledSendBtn} onClick={sendEncounter} className="flex gap-1 justify-center items-center">
             <span>Zgłoś</span> <PetIcon />
           </Button>
         </Card.CardContent>
