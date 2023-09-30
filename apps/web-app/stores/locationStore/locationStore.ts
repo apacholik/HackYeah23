@@ -38,7 +38,7 @@ const useLocationStore = create<State>((set, get) => ({
 
       if (currentListenerId) {
         navigator.geolocation.clearWatch(currentListenerId);
-        set(() => ({ enabled: false, listenerId: undefined, coords: undefined }));
+        set(() => ({ enabled: false, listenerId: undefined }));
       }
     },
   },
