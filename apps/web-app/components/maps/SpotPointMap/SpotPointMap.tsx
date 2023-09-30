@@ -4,7 +4,7 @@ import { useCallback, useLayoutEffect, useState } from "react";
 import type { VariantProps } from "tailwind-variants";
 import { Person } from "ui/components/icons";
 
-import { useLocationCoords } from "../../../stores/locationStore";
+import { useLocationCoords, useLocationIsEnabled } from "../../../stores/locationStore";
 import type { AnimalCoordsInfo } from "../../../types/animalCoords";
 import * as styles from "./SpotPointMap.styled";
 
@@ -25,6 +25,7 @@ const SPOTTED_POINT_RANGE_ZOOM_RATIO = 1.25;
 /** Map to be used with spotting form */
 export function SpotPointMap({ onAnimalMarkerMove = () => undefined, ...restProps }: Props) {
   const locationCoords = useLocationCoords();
+  const isLocationEnabled = useLocationIsEnabled();
 
   const [animalCoords, setAnimalCoords] = useState<AnimalCoordsInfo | undefined>(undefined);
 
@@ -73,8 +74,14 @@ export function SpotPointMap({ onAnimalMarkerMove = () => undefined, ...restProp
     }
   }, [locationCoords, mapState.center, setMapState, setAnimalCoordsAndEmitCallback]);
 
-  if (locationCoords == null) {
-    return <p>Need your coords to show map!</p>
+  useLayoutEffect(function resetAnimalCoordsAfterUserDisablesLocation() {
+    if (!isLocationEnabled) {
+      setAnimalCoords(locationCoords ? { point: [locationCoords.lng, locationCoords.lat], r: SPOTTED_POINT_RANGE } : undefined);
+    }
+  }, [isLocationEnabled, locationCoords]);
+
+  if (locationCoords == null || !isLocationEnabled) {
+    return <p>Need your coords to show map!</p>;
   }
 
   return (
@@ -112,7 +119,14 @@ export function SpotPointMap({ onAnimalMarkerMove = () => undefined, ...restProp
 
         {/* USER MARKER */}
         <Overlay anchor={[locationCoords.lat, locationCoords.lng]} offset={[USER_LOCATION_MARKER_SIZE / 2, USER_LOCATION_MARKER_SIZE / 2]}>
-          <Person style={{ fontSize: USER_LOCATION_MARKER_SIZE, color: "var(--fbc-primary-text)" }} onClick={handleUserLocationMarkerClick} />
+          <Person 
+            style={{ 
+              fontSize: USER_LOCATION_MARKER_SIZE,
+              color: "var(--fbc-primary-text)",
+              cursor: "pointer",
+            }}
+            onClick={handleUserLocationMarkerClick}
+          />
         </Overlay>
 
         <ZoomControl />
