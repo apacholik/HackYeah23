@@ -28,6 +28,7 @@
     "minireset.css": "^0.0.7",
     "next": "^12.2.5",
     "next-transpile-modules": "^9.0.0",
+    "pigeon-maps": "^0.21.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwind-config": "*",
