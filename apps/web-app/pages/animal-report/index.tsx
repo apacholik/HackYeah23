@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { Button, Card, Select } from "../../components/atoms";
+import { Button, Card, FileInput, Input, Select } from "../../components/atoms";
 import { SpotPointMap } from "../../components/maps";
 import { apiClient } from "../../helpers";
 import { useLocationActions, useLocationIsEnabled } from "../../stores/locationStore";
@@ -46,6 +46,16 @@ const AnimalReport: NextPage<AnimalReportProps> = ({ encounterTypes }) => {
     setFormState((current) => ({
       ...current,
       [key]: value,
+    }));
+  };
+
+  const updatePropertiesFormState = (key: string, value: string) => {
+    setFormState((current) => ({
+      ...current,
+      properties: {
+        ...current.properties,
+        [key]: value,
+      },
     }));
   };
 
@@ -92,6 +102,10 @@ const AnimalReport: NextPage<AnimalReportProps> = ({ encounterTypes }) => {
     );
   }
 
+  const additionalFields = encounterTypes.find((encounterType) => {
+    return encounterType.id === formState.encounterTypeId;
+  })?.properties;
+
   return (
     <div className="flex flex-col gap-6 items-center">
       <h2 className="scroll-m-20 w-full text-3xl font-semibold tracking-tight transition-colors first:mt-0">
@@ -122,7 +136,20 @@ const AnimalReport: NextPage<AnimalReportProps> = ({ encounterTypes }) => {
             }}
           />
 
-          <Select.Root onValueChange={updateFormState("encounterTypeId")}>
+          <FileInput
+            onChange={async (file) => {
+              const fd = new FormData();
+              fd.append("ImageFile", file);
+
+              const response = await apiClient.post("encounter-type-by-image", fd);
+
+              if (response) {
+                updateFormState("encounterTypeId")(response.data);
+              }
+            }}
+          />
+
+          <Select.Root value={formState.encounterTypeId} onValueChange={updateFormState("encounterTypeId")}>
             <Select.SelectTrigger>
               <Select.SelectValue placeholder="Typ" />
             </Select.SelectTrigger>
@@ -135,6 +162,15 @@ const AnimalReport: NextPage<AnimalReportProps> = ({ encounterTypes }) => {
               ))}
             </Select.SelectContent>
           </Select.Root>
+
+          {!!additionalFields &&
+            additionalFields.map((additionalField) => (
+              <Input
+                placeholder={additionalField.name}
+                key={additionalField.id}
+                onChange={(e) => updatePropertiesFormState(additionalField.id, e.target.value)}
+              />
+            ))}
 
           {isError && (
             <div className="flex justify-center items-center gap-6">
