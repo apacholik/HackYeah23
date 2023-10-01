@@ -35,6 +35,7 @@ export function Base({ children }: Props) {
             <li className="hover:text-green-900">Maria Kmita</li>
             <li className="hover:text-green-900">Anna Zarzycka</li>
             <li className="hover:text-green-900">Daria Dec</li>
+            <li className="hover:text-green-900">Jakub Kobyłko</li>
             <li className="hover:text-green-900">Kamil Janek</li>
             <li className="hover:text-green-900">Andrzej Pacholik</li>
           </ul>
