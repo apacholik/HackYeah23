@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-
 type Props = {
   onChange?: (file: File) => void;
 };
@@ -10,9 +9,8 @@ export function FileInput({ onChange }: Props) {
   const [fileItem, setFileItem] = useState<null | File>(null);
 
   return (
-    <div className="flex gap-1 items-center rounded p-2 bg-blue-200">
-      <label className="cursor-pointer" htmlFor="file">Dodaj zdjęcie</label>
-      <span>{fileItem?.name && `- ${fileItem.name}`}</span>
+    <label className="cursor-pointer flex gap-1 items-center rounded p-2 bg-blue-200" htmlFor="file">
+      <span>Dodaj zdjęcie</span> <span>{fileItem?.name && `- ${fileItem.name}`}</span>
       <input
         className="hidden"
         id="file"
@@ -26,6 +24,6 @@ export function FileInput({ onChange }: Props) {
           }
         }}
       />
-    </div>
+    </label>
   );
 }
