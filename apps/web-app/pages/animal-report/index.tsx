@@ -84,10 +84,10 @@ const AnimalReport: NextPage<AnimalReportProps> = ({ encounterTypes }) => {
   if (encounterTypes === null) {
     return (
       <div className="flex justify-center items-center h-full flex-col">
+        <Image className="w-1/3" src="/assets/img/nok.png" alt="" width="300" height="300" />
         <div className="border border-red-800 bg-red-200 text-red-900 p-6 rounded-md font-bold text-center w-1/3">
           Mamy nieoczekiwany problem
         </div>
-        <Image className="w-1/3 rotate-180" src="/assets/img/ok.png" alt="alright!" width="300" height="300" />
       </div>
     );
   }
@@ -136,7 +136,12 @@ const AnimalReport: NextPage<AnimalReportProps> = ({ encounterTypes }) => {
             </Select.SelectContent>
           </Select.Root>
 
-          {isError && <div className="text-center text-red-900">Coś poszło nie tak 😿</div>}
+          {isError && (
+            <div className="flex justify-center items-center gap-6">
+              <Image className="w-1/3" src="/assets/img/nok.png" alt="" width="50" height="50" />
+              <div className="text-red-900">Coś poszło nie tak</div>
+            </div>
+          )}
 
           <Button disabled={disabledSendBtn} onClick={sendEncounter} className="flex gap-1 justify-center items-center">
             <span>Zgłoś</span> <PetIcon />
