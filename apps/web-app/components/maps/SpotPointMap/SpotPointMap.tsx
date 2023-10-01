@@ -1,10 +1,11 @@
 import { type Point, GeoJson, GeoJsonFeature, Map as PidgeonMap, Overlay, ZoomControl } from "pigeon-maps";
 import { osm } from "pigeon-maps/providers";
-import { useCallback, useLayoutEffect, useState } from "react";
+import { type ComponentPropsWithoutRef, useCallback, useLayoutEffect, useState } from "react";
 import type { VariantProps } from "tailwind-variants";
 import { Person } from "ui/components/icons";
 
-import { useLocationCoords, useLocationIsEnabled } from "../../../stores/locationStore";
+import { USER_LOCATION_MARKER_SIZE, USER_MARKER_CONFIG } from "../../../constants/maps";
+import { useLocationCoords,useLocationIsEnabled } from "../../../stores/locationStore";
 import type { AnimalCoordsInfo } from "../../../types/animalCoords";
 import * as styles from "./SpotPointMap.styled";
 
@@ -18,7 +19,6 @@ const MAP_DEFAULT_WIDTH = 640;
 const MAP_DEFAULT_HEIGHT = 480;
 
 const INITIAL_ZOOM = 16;
-const USER_LOCATION_MARKER_SIZE = 32;
 const SPOTTED_POINT_RANGE = 1;
 const SPOTTED_POINT_RANGE_ZOOM_RATIO = 1.25;
 
@@ -36,7 +36,6 @@ export function SpotPointMap({ onAnimalMarkerMove = () => undefined, ...restProp
 
   const [mapState, setRawMapState] = useState({
     center: undefined as Point | undefined,
-    animating: false,
     zoom: INITIAL_ZOOM,
   });
 
@@ -62,7 +61,7 @@ export function SpotPointMap({ onAnimalMarkerMove = () => undefined, ...restProp
   }
 
   const handleBoundsChange = (
-    { center, zoom }: { center: typeof mapState['center'], zoom: typeof mapState['zoom'] }
+    { center, zoom }: Parameters<NonNullable<ComponentPropsWithoutRef<typeof PidgeonMap>['onBoundsChanged']>>[0]
   ) => {
     setMapState({ center, zoom });
   };
@@ -120,11 +119,7 @@ export function SpotPointMap({ onAnimalMarkerMove = () => undefined, ...restProp
         {/* USER MARKER */}
         <Overlay anchor={[locationCoords.lat, locationCoords.lng]} offset={[USER_LOCATION_MARKER_SIZE / 2, USER_LOCATION_MARKER_SIZE / 2]}>
           <Person 
-            style={{ 
-              fontSize: USER_LOCATION_MARKER_SIZE,
-              color: "var(--fbc-primary-text)",
-              cursor: "pointer",
-            }}
+            style={USER_MARKER_CONFIG}
             onClick={handleUserLocationMarkerClick}
           />
         </Overlay>

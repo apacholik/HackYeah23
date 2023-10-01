@@ -22,13 +22,13 @@ export function Base({ children }: Props) {
         </div>
 
         <div className="flex flex-col">
-          <MenuItem href="/example1" icon={<HomeIcon />} label="Example 1" />
+          <MenuItem href="/reports" icon={<HomeIcon />} label="Lista zgłoszeń" />
 
           <MenuItem href="/animal-report" icon={<AnimalIcon />} label="Zgłoś zwierzę" />
 
-          <MenuItem href="/example1" icon={<TagsIcon />} label="Example 3" />
+          <MenuItem href="/reports" icon={<TagsIcon />} label="Example 3" />
 
-          <MenuItem href="/example1" icon={<UsersIcon />} label="Example 4" />
+          <MenuItem href="/reports" icon={<UsersIcon />} label="Example 4" />
         </div>
       </div>
       <div className="bg-gray-100 w-full p-6">{children}</div>
