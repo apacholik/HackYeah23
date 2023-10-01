@@ -11,6 +11,7 @@ import { useLocationActions,useLocationCoords, useLocationIsEnabled } from "../.
 import type { SearchBoundingBox } from "../../../types/animalCoords";
 import type { EncounterDetails } from "../../../types/encounterDetails";
 import type EncounterTypeResponse from "../../../types/EncounterTypeResponse";
+import { Select } from "../../atoms";
 import * as styles from "./ResultsShowMap.styled";
 
 type Props = {
@@ -23,13 +24,16 @@ type Props = {
 const MAP_DEFAULT_WIDTH = 640;
 const MAP_DEFAULT_HEIGHT = 480;
 
+const ALL_ENCOUNTERS_CODE = "All";
+const ALL_ENCOUNTERS_DISPLAY_NAME = "Wszystkie zdarzenia";
+
 const INITIAL_ZOOM = 15;
 
 /** Map presenting places where users spotted missing animals */
 export function ResultsShowMap({
     isWild,
     encounterTypes,
-    defaultEncounterType = '', 
+    defaultEncounterType = ALL_ENCOUNTERS_CODE, 
     ...restProps
   }: Props) {
   const locationActions = useLocationActions();
@@ -37,6 +41,8 @@ export function ResultsShowMap({
   const isLocationEnabled = useLocationIsEnabled();
 
   const [searchBoundingBox, setSearchBoundingBox] = useState<SearchBoundingBox | undefined>(undefined);
+  const [selectedEncounter, setSelectedEncounter] = useState<EncounterDetails | undefined>(undefined);
+  const [selectedEncounterCode, setSelectedEncounterCode] = useState(defaultEncounterType);
 
   const { data: queryData } = useQuery<EncounterDetails[]>({
     queryKey: [
@@ -46,14 +52,14 @@ export function ResultsShowMap({
       searchBoundingBox?.minLatitude,
       searchBoundingBox?.maxLongitude,
       searchBoundingBox?.minLongitude,
-      defaultEncounterType
+      selectedEncounterCode
     ],
     keepPreviousData: true,
     enabled: isLocationEnabled && (searchBoundingBox !== undefined),
     queryFn: async () => {
       const response = await apiClient.post("Encounter", {
         ...searchBoundingBox,
-        encounterType: defaultEncounterType,
+        encounterType: selectedEncounterCode === ALL_ENCOUNTERS_CODE ? '' : selectedEncounterCode,
         isWild
       });
 
@@ -91,6 +97,12 @@ export function ResultsShowMap({
     }
   }, [locationCoords, mapState.center, setMapState]);
 
+  useLayoutEffect(function onUnmount() {
+    return () => {
+      setSelectedEncounter(undefined);
+    }
+  }, [])
+
   if (locationCoords == null || !isLocationEnabled) {
     return (
       <div>
@@ -107,59 +119,92 @@ export function ResultsShowMap({
 
   return (
     <div className={styles.resultsShowMap(restProps)}>
-      <p>Encounter types:</p>
-      <div>
-        {JSON.stringify(encounterTypes)}
+      <div className="w-4/12 flex flex-col gap-4">
+        <div>
+          <Select.Root value={selectedEncounterCode} onValueChange={(v) => setSelectedEncounterCode(v)}>
+            <Select.SelectTrigger>
+              <Select.SelectValue placeholder={ALL_ENCOUNTERS_DISPLAY_NAME} />
+            </Select.SelectTrigger>
+
+            <Select.SelectContent>
+              <Select.SelectItem value="All">
+                {ALL_ENCOUNTERS_DISPLAY_NAME}
+              </Select.SelectItem>
+
+              {encounterTypes.map((encounterType) => (
+                <Select.SelectItem key={encounterType.id} value={encounterType.code}>
+                  {encounterType.code}
+                </Select.SelectItem>
+              ))}
+            </Select.SelectContent>
+          </Select.Root>
+        </div>
+
+        <div>
+          <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight transition-colors first:mt-0">Szczegóły zdarzenia</h3>
+          
+          {!selectedEncounter ? 
+            <p>Kliknij w ikonę zwierzęcia by wyświetlić</p> :
+            <div>{JSON.stringify(selectedEncounter)}</div>
+          }
+        </div>
       </div>
 
-      <PidgeonMap
-        limitBounds="edge"
-        center={center}
-        zoom={zoom}
-        provider={osm}
-        dprs={[1, 2]}
-        onBoundsChanged={handleBoundsChange}
-        animate
-        zoomSnap={true}
-        metaWheelZoom={false}
-        twoFingerDrag={false}
-        mouseEvents
-        touchEvents
-        minZoom={INITIAL_ZOOM - 3}
-        maxZoom={INITIAL_ZOOM + 3}
-        defaultWidth={MAP_DEFAULT_WIDTH}
-        height={MAP_DEFAULT_HEIGHT}
-      >
-        {/* ANIMAL SPOTTING POINT IN FORM OF EMOJI */}
-        {queryData?.map(({ encounterType, timeUtc, latitude, longitude }) => {
-          return (
-            <Overlay
-              key={'overlay' + timeUtc + encounterType}
-              anchor={[latitude, longitude]}
-              // NOTE: Not sure why this value suits...
-              offset={[19.5, USER_LOCATION_MARKER_SIZE / 2]}
-            >
-              <span style={{ fontSize: USER_LOCATION_MARKER_SIZE, cursor: "default", lineHeight: 1 }}>
-                { 
-                  encounterType === "Kot" ? '🐱' : 
-                  encounterType === "Pies" ? '🐶' :
-                  encounterType === "Dzik" ? '🐗' :
-                  '🐾'
-                }
-              </span>
-            </Overlay>
-          )
-        })}
+      <div className="w-8/12 shrink-0">
+        <PidgeonMap
+          limitBounds="edge"
+          center={center}
+          zoom={zoom}
+          provider={osm}
+          dprs={[1, 2]}
+          onBoundsChanged={handleBoundsChange}
+          animate
+          zoomSnap={true}
+          metaWheelZoom={false}
+          twoFingerDrag={false}
+          mouseEvents
+          touchEvents
+          minZoom={INITIAL_ZOOM - 3}
+          maxZoom={INITIAL_ZOOM + 3}
+          defaultWidth={MAP_DEFAULT_WIDTH}
+          height={MAP_DEFAULT_HEIGHT}
+        >
+          {/* ANIMAL SPOTTING POINT IN FORM OF EMOJI */}
+          {queryData?.map((encounter) => {
+            const { encounterType, timeUtc, latitude, longitude } = encounter;
 
-        {/* USER MARKER */}
-        <Overlay anchor={[locationCoords.lat, locationCoords.lng]} offset={[USER_LOCATION_MARKER_SIZE / 2, USER_LOCATION_MARKER_SIZE / 2]}>
-          <Person 
-            style={{...USER_MARKER_CONFIG, cursor: 'default'}}
-          />
-        </Overlay>
+            return (
+              <Overlay
+                key={'overlay' + timeUtc + encounterType}
+                anchor={[latitude, longitude]}
+                // NOTE: Not sure why this value suits...
+                offset={[19.5, USER_LOCATION_MARKER_SIZE / 2]}
+              >
+                <span 
+                  style={{ fontSize: USER_LOCATION_MARKER_SIZE, cursor: "pointer", lineHeight: 1 }}
+                  onClick={() => setSelectedEncounter(encounter)}
+                >
+                  { 
+                    encounterType === "Kot" ? '🐱' : 
+                    encounterType === "Pies" ? '🐶' :
+                    encounterType === "Dzik" ? '🐗' :
+                    '🐾'
+                  }
+                </span>
+              </Overlay>
+            )
+          })}
 
-        <ZoomControl />
-      </PidgeonMap>
+          {/* USER MARKER */}
+          <Overlay anchor={[locationCoords.lat, locationCoords.lng]} offset={[USER_LOCATION_MARKER_SIZE / 2, USER_LOCATION_MARKER_SIZE / 2]}>
+            <Person 
+              style={{...USER_MARKER_CONFIG, cursor: 'default'}}
+            />
+          </Overlay>
+
+          <ZoomControl />
+        </PidgeonMap>
+      </div>
     </div>
   );
 }
