@@ -150,7 +150,23 @@ export function ResultsShowMap({
           
           {!selectedEncounter ? 
             <p>Kliknij w ikonę zwierzęcia by wyświetlić</p> :
-            <div>{JSON.stringify(selectedEncounter)}</div>
+            <div>
+              {
+                !selectedEncounter.images.length || selectedEncounter.properties == null ?
+                <p>Brak informacji o szczegółach zdarzenia...</p> :
+                <div className="flex flex-col gap-4">
+                  {selectedEncounter.properties != null && <div>
+                    {selectedEncounter.properties.map(({ name, value, valueType }) => {
+                      return <p key={valueType}><strong>{name}:</strong> {value}</p>
+                    })}
+                  </div>}
+
+                  {selectedEncounter.images.map((src) => 
+                    <img key={src} src={src} alt="" width="100%" height="auto" />
+                  )}
+                </div>
+              }
+            </div>
           }
         </div>
       </div>
