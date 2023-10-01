@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { GetStaticProps, NextPage } from "next";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -10,17 +11,27 @@ import { useLocationActions, useLocationIsEnabled } from "../../stores/locationS
 import EncounterTypeResponse from "../../types/EncounterTypeResponse";
 
 type AnimalReportProps = {
-  encounterTypes: Array<EncounterTypeResponse>;
+  encounterTypes: null | Array<EncounterTypeResponse>;
 };
 
 export const getStaticProps: GetStaticProps<AnimalReportProps> = async () => {
-  const encounterTypeResponse = await apiClient.get<Array<EncounterTypeResponse>>("EncounterType");
+  try {
+    const encounterTypeResponse = await apiClient.get<Array<EncounterTypeResponse>>("EncounterType");
 
-  return {
-    props: {
-      encounterTypes: encounterTypeResponse.data,
-    },
-  };
+    return {
+      revalidate: 1,
+      props: {
+        encounterTypes: encounterTypeResponse.data,
+      },
+    };
+  } catch {
+    return {
+      revalidate: 1,
+      props: {
+        encounterTypes: null,
+      },
+    };
+  }
 };
 
 const AnimalReport: NextPage<AnimalReportProps> = ({ encounterTypes }) => {
@@ -69,6 +80,17 @@ const AnimalReport: NextPage<AnimalReportProps> = ({ encounterTypes }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
+
+  if (encounterTypes === null) {
+    return (
+      <div className="flex justify-center items-center h-full flex-col">
+        <div className="border border-red-800 bg-red-200 text-red-900 p-6 rounded-md font-bold text-center w-1/3">
+          Mamy nieoczekiwany problem
+        </div>
+        <Image className="w-1/3 rotate-180" src="/assets/img/ok.png" alt="alright!" width="300" height="300" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6 items-center">
