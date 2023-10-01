@@ -5,4 +5,10 @@ export type EncounterDetails = {
   latitude: number;
   longitude: number;
   propabilityOfOccurance: number;
+  images: string[];
+  properties?: [{
+    name: string;
+    value: string;
+    valueType: string;
+  }];
 }
