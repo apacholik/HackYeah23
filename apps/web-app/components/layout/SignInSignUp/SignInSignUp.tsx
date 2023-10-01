@@ -4,7 +4,7 @@ import { Dialog } from "../../atoms";
 export function SignInSignUp() {
   return (
     <Dialog.Root>
-      <Dialog.DialogTrigger className="bg-blue-100 rounded-md px-2 py-1 flex items-center gap-1">
+      <Dialog.DialogTrigger className="bg-blue-100 rounded-md px-2 py-1 flex items-center justify-center gap-2" style={{ width: "100%" }}>
         <span>Dołącz do Nas!</span>
         <svg width="11.25" height="18" viewBox="0 0 15 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
