@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
 
@@ -13,8 +14,10 @@ export function Base({ children }: Props) {
   return (
     <div className="flex min-h-full">
       <div className="bg-white w-1/5 shrink-0 px-4 py-6 flex flex-col gap-4">
-        <h1 className="croll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-          <Link href="/">Best team</Link>
+        <h1 className="flex justify-center">
+          <Link href="/">
+            <Image className="" src="/assets/img/logo.png" alt="" width="177.6" height="194.8" />
+          </Link>
         </h1>
 
         <div className="text-center underline">
@@ -24,7 +27,7 @@ export function Base({ children }: Props) {
         <div className="flex flex-col">
           <MenuItem href="/reports" icon={<HomeIcon />} label="Lista zgłoszeń" />
 
-          <MenuItem href="/animal-report" icon={<AnimalIcon />} label="Zgłoś zwierzę" />
+          <MenuItem href="/animal-report" icon={<AnimalIcon />} label="Zgłoś incydent" />
 
           <MenuItem href="/reports" icon={<TagsIcon />} label="Example 3" />
 
