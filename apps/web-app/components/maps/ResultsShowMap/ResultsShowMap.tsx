@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { type Point, GeoJson, GeoJsonFeature, Map as PidgeonMap, Overlay, ZoomControl } from "pigeon-maps";
+import { type Point, Map as PidgeonMap, Overlay, ZoomControl } from "pigeon-maps";
 import { osm } from "pigeon-maps/providers";
 import { type ComponentPropsWithoutRef, useCallback, useLayoutEffect, useState } from "react";
 import type { VariantProps } from "tailwind-variants";
@@ -23,9 +23,7 @@ type Props = {
 const MAP_DEFAULT_WIDTH = 640;
 const MAP_DEFAULT_HEIGHT = 480;
 
-const INITIAL_ZOOM = 14;
-const SPOTTED_POINT_RANGE = 1;
-const SPOTTED_POINT_RANGE_ZOOM_RATIO = 1.25;
+const INITIAL_ZOOM = 15;
 
 /** Map presenting places where users spotted missing animals */
 export function ResultsShowMap({
@@ -61,8 +59,6 @@ export function ResultsShowMap({
       return response.data;
     },
   });
-
-  console.log({ encounterTypes, queryData });
 
   const [mapState, setRawMapState] = useState({
     center: undefined as Point | undefined,
@@ -100,6 +96,11 @@ export function ResultsShowMap({
 
   return (
     <div className={styles.resultsShowMap(restProps)}>
+      <p>Encounter types:</p>
+      <div>
+        {JSON.stringify(encounterTypes)}
+      </div>
+
       <PidgeonMap
         limitBounds="edge"
         center={center}
@@ -113,35 +114,36 @@ export function ResultsShowMap({
         twoFingerDrag={false}
         mouseEvents
         touchEvents
-        minZoom={INITIAL_ZOOM - 2}
-        maxZoom={INITIAL_ZOOM + 4}
+        minZoom={INITIAL_ZOOM - 3}
+        maxZoom={INITIAL_ZOOM + 3}
         defaultWidth={MAP_DEFAULT_WIDTH}
         height={MAP_DEFAULT_HEIGHT}
       >
-        {/* ANIMAL SPOTTING POINT IN FORM OF GEOJSON */}
+        {/* ANIMAL SPOTTING POINT IN FORM OF EMOJI */}
         {queryData?.map(({ encounterType, timeUtc, latitude, longitude }) => {
           return (
-            <GeoJson
-              key={timeUtc + encounterType}
-              svgAttributes={{
-                fill: "var(--tw-ring-color)",
-                strokeWidth: "2",
-                stroke: "var(--tw-ring-color)",
-                r: (SPOTTED_POINT_RANGE * zoom * SPOTTED_POINT_RANGE_ZOOM_RATIO).toString(),
-              }}
+            <Overlay
+              key={'overlay' + timeUtc + encounterType}
+              anchor={[latitude, longitude]}
+              // NOTE: Not sure why this value suits...
+              offset={[19.5, USER_LOCATION_MARKER_SIZE / 2]}
             >
-              <GeoJsonFeature feature={{
-                type: "Feature",
-                geometry: { type: "Point", coordinates: [longitude, latitude] }
-              }} />
-            </GeoJson>
+              <span style={{ fontSize: USER_LOCATION_MARKER_SIZE, cursor: "default", lineHeight: 1 }}>
+                { 
+                  encounterType === "Kot" ? '🐱' : 
+                  encounterType === "Pies" ? '🐶' :
+                  encounterType === "Dzik" ? '🐗' :
+                  '🐾'
+                }
+              </span>
+            </Overlay>
           )
         })}
 
         {/* USER MARKER */}
         <Overlay anchor={[locationCoords.lat, locationCoords.lng]} offset={[USER_LOCATION_MARKER_SIZE / 2, USER_LOCATION_MARKER_SIZE / 2]}>
           <Person 
-            style={USER_MARKER_CONFIG}
+            style={{...USER_MARKER_CONFIG, cursor: 'default'}}
           />
         </Overlay>
 
