@@ -14,6 +14,8 @@ export const getStaticProps: GetStaticProps<AnimalReportProps> = async () => {
   try {
     const encounterTypeResponse = await apiClient.get<Array<EncounterTypeResponse>>("EncounterType");
 
+    console.log("encounterTypeResponse", encounterTypeResponse);
+
     return {
       revalidate: 1,
       props: {
