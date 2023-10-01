@@ -69,10 +69,12 @@ export const FormRegisterForeignAnimal = ({ encounterTypes }: FormRegisterForeig
   useEffect(() => {
     if (isSuccess) {
       const successPage = "/animal-report/thanks";
+      const animalType = encounterTypes.find(({ id }) => id === formState.encounterTypeId)?.code;
 
       push({
         hash: data,
         pathname: successPage,
+        query: animalType ? `animalType=${animalType}` : undefined
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

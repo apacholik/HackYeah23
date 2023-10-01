@@ -206,7 +206,7 @@ export function ResultsShowMap({
               selectedEncounter.timeUtc + selectedEncounter.encounterType
               : undefined;
 
-            const scaleRatio = (propabilityOfOccurance / 100) * 2;
+            const scaleRatio = Math.max((propabilityOfOccurance / 100) * 1.5, 0.75);
 
             return (
               <Overlay
