@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
 import { apiClient } from "../../helpers";
 
 export default function AnimalReportThanks() {
   const { query } = useRouter();
-  const animalType = query['animalType'] || '';
+  const animalType = query["animalType"] || "";
 
   const { data: factData } = useQuery<string>({
     queryKey: ["Fact", animalType],
@@ -17,7 +17,7 @@ export default function AnimalReportThanks() {
       return response.data;
     },
     retry: 0,
-    staleTime: Infinity
+    staleTime: Infinity,
   });
 
   return (
@@ -29,10 +29,12 @@ export default function AnimalReportThanks() {
         </div>
       </div>
 
-      {!!factData && <div className="w-80">
-        <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight transition-colors first:mt-0">Czy wiesz że?</h3>
-        <p>{factData}</p>
-      </div>}
+      <div className="w-80">
+        <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight transition-colors first:mt-0">
+          Czy wiesz że?
+        </h3>
+        <p>{!!factData ? factData : "Dzik jest dziki, dzik jest zły..."}</p>
+      </div>
     </div>
   );
 }
