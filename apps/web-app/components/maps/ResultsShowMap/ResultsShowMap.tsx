@@ -7,7 +7,7 @@ import { Person } from "ui/components/icons";
 
 import { USER_LOCATION_MARKER_SIZE, USER_MARKER_CONFIG } from "../../../constants/maps";
 import { apiClient } from "../../../helpers";
-import { useLocationCoords, useLocationIsEnabled } from "../../../stores/locationStore";
+import { useLocationActions,useLocationCoords, useLocationIsEnabled } from "../../../stores/locationStore";
 import type { SearchBoundingBox } from "../../../types/animalCoords";
 import type { EncounterDetails } from "../../../types/encounterDetails";
 import type EncounterTypeResponse from "../../../types/EncounterTypeResponse";
@@ -32,6 +32,7 @@ export function ResultsShowMap({
     defaultEncounterType = '', 
     ...restProps
   }: Props) {
+  const locationActions = useLocationActions();
   const locationCoords = useLocationCoords();
   const isLocationEnabled = useLocationIsEnabled();
 
@@ -91,7 +92,17 @@ export function ResultsShowMap({
   }, [locationCoords, mapState.center, setMapState]);
 
   if (locationCoords == null || !isLocationEnabled) {
-    return null;
+    return (
+      <div>
+        Potrzebujemy Twoich współrzędnych.{" "}
+        <span
+          className="bg-green-100 rounded-md p-1 px-2 hover:bg-green-300 cursor-pointer"
+          onClick={locationActions.enable}
+        >
+          Aktywuj
+        </span>
+      </div>
+    );
   }
 
   return (
