@@ -27,7 +27,7 @@ export function Base({ children }: Props) {
         <div className="flex flex-col">
           <MenuItem href="/example1" icon={<HomeIcon />} label="Example 1" />
 
-          <MenuItem href="/animal-report" icon={<AnimalIcon />} label="Zgłoś zwierzę" />
+          <MenuItem href="/animal-report" icon={<AnimalIcon />} label="Zgłoś incydent" />
 
           <MenuItem href="/example1" icon={<TagsIcon />} label="Example 3" />
 
