@@ -189,6 +189,13 @@ export function ResultsShowMap({
           maxZoom={INITIAL_ZOOM + 3}
           height={MAP_DEFAULT_HEIGHT}
         >
+          {/* USER MARKER */}
+          <Overlay anchor={[locationCoords.lat, locationCoords.lng]} offset={[USER_LOCATION_MARKER_SIZE / 2, USER_LOCATION_MARKER_SIZE / 2]}>
+            <Person 
+              style={{...USER_MARKER_CONFIG, cursor: 'default', pointerEvents: 'none'}}
+            />
+          </Overlay>
+
           {/* ANIMAL SPOTTING POINT IN FORM OF EMOJI */}
           {queryData?.map((encounter) => {
             const { encounterType, timeUtc, latitude, longitude, propabilityOfOccurance } = encounter;
@@ -199,7 +206,7 @@ export function ResultsShowMap({
               selectedEncounter.timeUtc + selectedEncounter.encounterType
               : undefined;
 
-            const scaleRatio = (propabilityOfOccurance / 100) * 1.75;
+            const scaleRatio = (propabilityOfOccurance / 100) * 2;
 
             return (
               <Overlay
@@ -215,7 +222,7 @@ export function ResultsShowMap({
                       cursor: "pointer",
                       lineHeight: 1,
                       borderRadius: "100%",
-                      boxShadow: key === selectedEncounterKey ? "0px 0px 0px 0.5rem var(--tw-ring-color)" : undefined,
+                      boxShadow: `0px 0px 0px 0.5rem ${key === selectedEncounterKey ? 'var(--tw-ring-color)' : 'rgba(0, 0, 0, 0.2)'}`,
                     }
                   }
                   onClick={() => setSelectedEncounter(encounter)}
@@ -230,13 +237,6 @@ export function ResultsShowMap({
               </Overlay>
             )
           })}
-
-          {/* USER MARKER */}
-          <Overlay anchor={[locationCoords.lat, locationCoords.lng]} offset={[USER_LOCATION_MARKER_SIZE / 2, USER_LOCATION_MARKER_SIZE / 2]}>
-            <Person 
-              style={{...USER_MARKER_CONFIG, cursor: 'default'}}
-            />
-          </Overlay>
 
           <ZoomControl />
         </PidgeonMap>
