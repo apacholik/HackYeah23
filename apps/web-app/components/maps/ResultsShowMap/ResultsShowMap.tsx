@@ -21,7 +21,6 @@ type Props = {
 } & VariantProps<typeof styles.resultsShowMap>;
 
 // TODO: Those values to be altered
-const MAP_DEFAULT_WIDTH = 640;
 const MAP_DEFAULT_HEIGHT = 480;
 
 const ALL_ENCOUNTERS_CODE = "All";
@@ -121,7 +120,13 @@ export function ResultsShowMap({
     <div className={styles.resultsShowMap(restProps)}>
       <div className="w-4/12 flex flex-col gap-4">
         <div>
-          <Select.Root value={selectedEncounterCode} onValueChange={(v) => setSelectedEncounterCode(v)}>
+          <Select.Root 
+            value={selectedEncounterCode}
+            onValueChange={(v) => {
+              setSelectedEncounterCode(v);
+              setSelectedEncounter(undefined);
+            }}
+          >
             <Select.SelectTrigger>
               <Select.SelectValue placeholder={ALL_ENCOUNTERS_DISPLAY_NAME} />
             </Select.SelectTrigger>
@@ -166,22 +171,37 @@ export function ResultsShowMap({
           touchEvents
           minZoom={INITIAL_ZOOM - 3}
           maxZoom={INITIAL_ZOOM + 3}
-          defaultWidth={MAP_DEFAULT_WIDTH}
           height={MAP_DEFAULT_HEIGHT}
         >
           {/* ANIMAL SPOTTING POINT IN FORM OF EMOJI */}
           {queryData?.map((encounter) => {
-            const { encounterType, timeUtc, latitude, longitude } = encounter;
+            const { encounterType, timeUtc, latitude, longitude, propabilityOfOccurance } = encounter;
+    
+            const key = timeUtc + encounterType;
+
+            const selectedEncounterKey = selectedEncounter != null ? 
+              selectedEncounter.timeUtc + selectedEncounter.encounterType
+              : undefined;
+
+            const scaleRatio = (propabilityOfOccurance / 100) * 1.75;
 
             return (
               <Overlay
-                key={'overlay' + timeUtc + encounterType}
+                key={'overlay' + key}
                 anchor={[latitude, longitude]}
                 // NOTE: Not sure why this value suits...
-                offset={[19.5, USER_LOCATION_MARKER_SIZE / 2]}
+                offset={[19.5 * scaleRatio, USER_LOCATION_MARKER_SIZE / 2]}
               >
                 <span 
-                  style={{ fontSize: USER_LOCATION_MARKER_SIZE, cursor: "pointer", lineHeight: 1 }}
+                  style={
+                    {
+                      fontSize: USER_LOCATION_MARKER_SIZE * scaleRatio,
+                      cursor: "pointer",
+                      lineHeight: 1,
+                      borderRadius: "100%",
+                      boxShadow: key === selectedEncounterKey ? "0px 0px 0px 0.5rem var(--tw-ring-color)" : undefined,
+                    }
+                  }
                   onClick={() => setSelectedEncounter(encounter)}
                 >
                   { 

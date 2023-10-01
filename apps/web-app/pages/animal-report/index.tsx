@@ -51,8 +51,8 @@ const AnimalReport: NextPage<AnimalReportProps> = ({ encounterTypes }) => {
       <div>
         <Tabs.Root defaultValue="foreign">
           <Tabs.TabsList>
-            <Tabs.TabsTrigger value="foreign">Zgłoś spotkanie zwierze</Tabs.TabsTrigger>
-            <Tabs.TabsTrigger value="missingPet">Zgłoś zaginione zwierze</Tabs.TabsTrigger>
+            <Tabs.TabsTrigger value="foreign">Zgłoś spotkane zwierzę</Tabs.TabsTrigger>
+            <Tabs.TabsTrigger value="missingPet">Zgłoś zaginione zwierzę</Tabs.TabsTrigger>
           </Tabs.TabsList>
 
           <Tabs.TabsContent value="foreign">
