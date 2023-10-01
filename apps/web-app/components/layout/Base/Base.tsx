@@ -14,7 +14,7 @@ export function Base({ children }: Props) {
   return (
     <div className="flex min-h-full">
       <div className="bg-white w-1/5 shrink-0 px-4 py-6 flex flex-col gap-4">
-        <h1 className="flex justify-center">
+        <h1 className="flex justify-center cursor-pointer">
           <Link href="/">
             <Image className="" src="/assets/img/logo.png" alt="" width="177.6" height="194.8" />
           </Link>
