@@ -29,6 +29,16 @@ export function Base({ children }: Props) {
 
           <MenuItem href="/animal-report" icon={<AnimalIcon />} label="Zgłoś incydent" />
         </div>
+
+        <div className="flex flex-col flex-grow justify-end">
+          <ul className="list-disc p-2">
+            <li className="hover:text-green-900">Maria Kmita</li>
+            <li className="hover:text-green-900">Anna Zarzycka</li>
+            <li className="hover:text-green-900">Daria Dec</li>
+            <li className="hover:text-green-900">Kamil Janek</li>
+            <li className="hover:text-green-900">Andrzej Pacholik</li>
+          </ul>
+        </div>
       </div>
       <div className="bg-gray-100 w-full p-6">{children}</div>
     </div>
